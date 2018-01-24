@@ -6,7 +6,9 @@ import org.junit.Test;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -53,7 +55,7 @@ public class CalculatorTest {
 
     @Test
     public void useDynamicProxy() {
-
+        //todo
 
     }
 
@@ -63,15 +65,21 @@ public class CalculatorTest {
     @Test
     public void useMock() {
         Calculator calculator = new Calculator();
-
+        //创建Mock对象
         Add adder = createMock(Add.class);
         calculator.setAdder(adder);
-
+        //录制
         expect(adder.add(1, 2)).andReturn(3).anyTimes();
+
+        //adder.add(1,2);
+        //expectLastCall().andReturn(3);
+
+        //切换为回放状态
         replay(adder);
-
+        //进行单元测试
         assertEquals(3, calculator.add(1, 2));
-
+        //验证Mock对象调用
+        verify(adder);
     }
 
 }
