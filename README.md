@@ -460,7 +460,7 @@ EasyMock 不可以实现对静态方法、构造方法、私有方法、final �
 不过还有对应的扩展 PowerMock。
 PowerMock 也是一个单元测试模拟框架，它是在其它单元测试模拟框架的基础上做出的扩展。通过提供定制的类加载器以及一些字节码篡改技巧的应用，PowerMock 现了对静态方法、构造方法、私有方法以及 final 方法的模拟支持，对静态初始化过程的移除等强大的功能。
 
-我大致试了一下，但是再一些模块上由于我们插件加载机制的问题，好像 PowerMock 测试这些模块的时候会出现问题。
+我大致试了一下，但是在一些模块上由于我们插件加载机制的问题，好像 PowerMock 测试这些模块的时候会出现问题。
 
 有机会也可以再介绍一下。
 
@@ -472,3 +472,8 @@ PowerMock 也是一个单元测试模拟框架，它是在其它单元测试模�
 
 今天的 1+2=3 的例子就讲完了。
 
+## 参考
+
+[EASYMOCK原理浅析](http://shlteater.iteye.com/blog/394191 'EASYMOCK原理浅析')
+
+[EasyMock 使用方法与原理剖析](https://www.ibm.com/developerworks/cn/opensource/os-cn-easymock/ 'EasyMock 使用方法与原理剖析')
