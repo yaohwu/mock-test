@@ -18,7 +18,7 @@ public class AddInvocationHandler implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable, InvocationTargetException {
+    public Object invoke(Object proxy, Method method, Object[] args) throws InvocationTargetException, IllegalAccessException {
         if ("add".equals(method.getName())) {
             Integer x = (Integer) args[0];
             Integer y = (Integer) args[1];
