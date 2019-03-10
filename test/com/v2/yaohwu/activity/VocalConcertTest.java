@@ -22,7 +22,7 @@ public class VocalConcertTest {
         EasyMock.expect(defaultMockSinger.show()).andReturn("defaultMockSinger show").anyTimes();
 
         EasyMock.expect(defaultMockSinger.getName()).andStubReturn("");
-        EasyMock.expect(defaultMockSinger.getBirthday()).andThrow(new RuntimeException("Error e"));
+        EasyMock.expect(defaultMockSinger.getBirthday()).andStubThrow(new RuntimeException("Error e"));
 
         EasyMock.replay(defaultMockSinger);
 

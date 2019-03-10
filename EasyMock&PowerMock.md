@@ -243,7 +243,7 @@ EasyMock.expectLastCall()
 
 ```java
 EasyMock.expect(defaultMockSinger.getName()).andStubReturn("");
-EasyMock.expect(defaultMockSinger.getBirthday()).andThrow(new RuntimeException("Error e"));
+EasyMock.expect(defaultMockSinger.getBirthday()).andStubThrow(new RuntimeException("Error e"));
 ```
 
 #### 参数匹配
