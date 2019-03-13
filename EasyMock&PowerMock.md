@@ -220,17 +220,22 @@ public class SingerTest3 {
 ### expect
 
 ```java
-Singer defaultSinger = EasyMock.mock(Singer.class);
-
-// 对存在返回值的方法进行录制
-EasyMock.expect(defaultSinger.show()).andReturn("fff").once();
-EasyMock.expect(defaultSinger.getName()).andReturn("b").once();
-// 对没有返回值的方法进行录制
-defaultSinger.setName("c");
-EasyMock.expectLastCall()
-        .andThrow(new RuntimeException("Error Cannot Reset Name")).once()
-        .andVoid().once()
-        .andThrow(new RuntimeException("Error Cannot Reset Name For More Times")).anyTimes();
+public class TestMain{
+    @Test
+    public void test(){
+        Singer defaultSinger = EasyMock.mock(Singer.class);
+        
+        // 对存在返回值的方法进行录制
+        EasyMock.expect(defaultSinger.show()).andReturn("fff").once();
+        EasyMock.expect(defaultSinger.getName()).andReturn("b").once();
+        // 对没有返回值的方法进行录制
+        defaultSinger.setName("c");
+        EasyMock.expectLastCall()
+                .andThrow(new RuntimeException("Error Cannot Reset Name")).once()
+                .andVoid().once()
+                .andThrow(new RuntimeException("Error Cannot Reset Name For More Times")).anyTimes();
+    }
+}
 ```
 
 * times andReturn andThrow 是可以被链式调用的，并且可以是多组组合使用
@@ -241,17 +246,17 @@ EasyMock.expectLastCall()
 
 上面使用的 expect 是我们期望进行的录制并希望参与 verify 的，假设部分方法，我们也希望他们对调用做出反应，同时也不在乎他们何时何地被调用多少次，那么可以使用 andStub 开头的方法。
 
-```java
+`
 EasyMock.expect(defaultMockSinger.getName()).andStubReturn("");
 EasyMock.expect(defaultMockSinger.getBirthday()).andStubThrow(new RuntimeException("Error e"));
-```
+`
 
 #### 参数匹配
 
-```java
+`
 EasyMock.expect(dictionary.get(EasyMock.eq(1001L), EasyMock.anyObject(Calculator.class)))
         .andReturn("J").anyTimes();
-```
+`
 
 有时候，我们并不确认实际调用的参数是什么或者说实际上的参数是一个范围，那么我们就可以用到参数匹配。
 
@@ -259,20 +264,24 @@ EasyMock 中提供了多种多样的线程的方法来供我们使用。
 
 需要注意的是，**被调用方法的参数要么全部使用确定的值，要么全部使用参数匹配器**，不能出现下面这种场景。
 
-```java
+`
 EasyMock.expect(dictionary.get(1000L, EasyMock.anyObject(Calculator.class)))
         .andReturn("J").anyTimes();
-```
+`
 
 ##### 自定义参数匹配器
 
 ```java
 
-// EasyMock.endsWith() 的实现
-public static String endsWith(String suffix) {
-        reportMatcher(new EndsWith(suffix));
-        return null;
+public class EasyMock{
+    // EasyMock.endsWith() 的实现
+    public static String endsWith(String suffix) {
+            reportMatcher(new EndsWith(suffix));
+            return null;
+    }
 }
+```
+```java
 
 public class EndsWith implements IArgumentMatcher, Serializable {
 
@@ -303,16 +312,21 @@ public class EndsWith implements IArgumentMatcher, Serializable {
 ## verify
 
 ```java
-// 录制
-expect();
-// 设定未回放状态
-replay();
-
-// 调用业务逻辑进行测试
-test();
-
-// 验证录制的方法调用的 times() 是否符合预期，如果和预期不符合，会抛出异常显示多或者少
-verrify();
+public class Test{
+    @Test
+    public void testA(){
+        // 录制
+        expect();
+        // 设定未回放状态
+        replay();
+        
+        // 调用业务逻辑进行测试
+        test();
+        
+        // 验证录制的方法调用的 times() 是否符合预期，如果和预期不符合，会抛出异常显示多或者少
+        verrify();
+    }
+}
 ```
 
 ### reset()
@@ -395,12 +409,12 @@ public class JavaScriptImplTest {
 例如：
 
 ```java
-public class SessionManager(){
+public class SessionManager {
     private static final Service service = OtherModuleService.getService();
 
     static {
         authenticateLicense();
-        doSomethingSpecialDependsOnOtherModule()
+        doSomethingSpecialDependsOnOtherModule();
     }
 }
 ```
@@ -500,6 +514,7 @@ public class ManagerTest {
         // 获取变量 RECORDS 的值
         System.out.println(((List) Whitebox.getInternalState(Manager.class, "RECORDS")).size());
     }
+}
 ```
 
 ##### 其他的 suppress 场景
@@ -521,6 +536,7 @@ PowerMock 采用自定义类加载器的方式加载被测试类，如果出现�
 使用方式：
 
 ```java
+@RunWith(PowerMockRunner.class)
 @PowerMockIgnore({"javax.crypto.*"})
 public class XXXTest {
 }
