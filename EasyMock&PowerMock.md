@@ -345,6 +345,8 @@ PowerMock is a Java framework that allows you to unit test code normally regarde
 
 ### mock static
 
+#### common mock static
+
 1. 类上加注解 @RunWith(PowerMockRunner.class)
 2. 类上加注解 @PrepareForTest(ClassThatContainsStaticMethod.class)
 3. mock PowerMock.mockStatic(ClassThatContainsStaticMethod.class)
@@ -388,6 +390,44 @@ public class JavaScriptImplTest {
 ```
 
 * 注意，PowerMock 的 replayAll 并不会触发 EasyMock 的 replay(xxx) 因此还是要分开调用，EasyMock 只是负责给 PowerMock mock 的对象预设行为，replay 和 verify PowerMock 和 EasyMock 两者还是各走各的。
+
+#### mock partial static or private method
+
+如下的代码中就只是 mock 了  **MimeUtility** 其中的两个方法。
+其中 **getDefaultMIMECharset** 不是一个 **public** 的方法。
+
+``` java
+// ....
+PowerMock.mockStaticPartial(MimeUtility.class, "getDefaultJavaCharset", "getDefaultMIMECharset");
+EasyMock.expect(MimeUtility.getDefaultJavaCharset()).andAnswer(new IAnswer<String>() {
+    @Override
+    public String answer() throws Throwable {
+        return "GBK";
+    }
+}).once().andAnswer(new IAnswer<String>() {
+    @Override
+    public String answer() throws Throwable {
+        return "UTF-8";
+    }
+}).once();
+
+try {
+    PowerMock.expectPrivate(MimeUtility.class, "getDefaultMIMECharset").andAnswer(new IAnswer<String>() {
+        @Override
+        public String answer() throws Throwable {
+            return "GBK";
+        }
+    }).once().andAnswer(new IAnswer<String>() {
+        @Override
+        public String answer() throws Throwable {
+            return "UTF-8";
+        }
+    }).once();
+} catch (Exception e) {
+    Assert.fail(e.getMessage());
+}
+// ...
+```
 
 ### mock final
 
@@ -532,6 +572,10 @@ PowerMock 采用自定义类加载器的方式加载被测试类，如果出现�
 出现的类型转换异常：
 
 `xxx.xxx.xxx.xxx cannot be cast to xxx.xxx.xxxProvider`
+
+也不仅仅局限于这个异常，如果你看到你一个不能解决的异常，其中有 package name 的信息，那么可以尝试使用 **@PowerMockIgnore**。
+
+一般这些类有 "javax.crypto.\*","javax.net.ssl.\*","sun.security.ssl.\*" 等。
 
 使用方式：
 
